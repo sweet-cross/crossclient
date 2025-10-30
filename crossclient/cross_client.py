@@ -1,3 +1,5 @@
+from typing import Any
+
 import httpx
 
 from pydantic import BaseModel, Field, model_validator
@@ -15,19 +17,26 @@ class CrossClient(BaseModel):
         default="https://sweetcross.link/api/v1",
         description="The base URL of the SweetCross API.",
     )
+    transport: Any | None = Field(
+        default=None,
+        exclude=True,
+        description="Optional custom transport for the HTTP client.",
+    )
     _client: httpx.Client | None = None
     _token_client: TokenClient | None = None
 
     @model_validator(mode="after")
-    def validate_credentials(self) -> None:
+    def validate_credentials(self) -> "CrossClient":
         """Validator to retrieve the token after model initialization and
         initialize the HTTP client."""
         self._token_client = TokenClient(
             username=self.username,
             password=self.password,
             base_url=self.base_url,
+            transport=self.transport,
         )
-        self._client = httpx.Client(base_url=self.base_url)
+        self._client = httpx.Client(base_url=self.base_url, transport=self.transport)
+        return self
 
     def _request(
         self, method: str, endpoint: str, headers: dict | None = None, **kwargs
@@ -44,6 +53,8 @@ class CrossClient(BaseModel):
         Returns:
             httpx.Response: The response from the API.
         """
+        assert self._token_client is not None, "TokenClient should be initialized"
+        assert self._client is not None, "Client should be initialized"
         if headers is None:
             headers = {}
         headers["Authorization"] = (

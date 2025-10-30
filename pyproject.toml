@@ -13,5 +13,24 @@ dependencies = [
 [dependency-groups]
 dev = [
     "coverage>=7.11.0",
+    "mypy>=1.18.2",
     "pytest>=8.4.2",
+    "ty>=0.0.1a25",
 ]
+
+[tool.coverage.report]
+show_missing = true
+omit = [
+    # exclude test folders
+    "tests/*",
+]
+exclude_lines = [
+    "pragma: no cover",
+    "^\\s*pass\\s*$",            # Standalone pass statements
+    "^\\s*\\.\\.\\.\\s*$",       # Standalone ellipsis
+    "raise NotImplementedError", # Abstract method implementations
+]
+
+[tool.pytest.ini_options]
+addopts = "-W ignore::DeprecationWarning --tb=no --log-level=WARNING"
+testpaths = ["tests"]

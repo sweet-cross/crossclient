@@ -1,6 +1,7 @@
+from typing import Any
 from datetime import datetime, timezone, timedelta
 import httpx
-from pydantic import BaseModel, Field, model_validator, computed_field
+from pydantic import BaseModel, Field, model_validator, computed_field, PrivateAttr
 
 
 class Token(BaseModel):
@@ -49,23 +50,31 @@ class TokenClient(BaseModel):
     username: str = Field(description="The username for authentication.")
     password: str = Field(description="The password for authentication.")
     base_url: str = Field(description="The base URL of the API.")
-    _token: Token | None = None
+    transport: Any | None = Field(
+        default=None,
+        exclude=True,
+        description="Optional custom transport for the HTTP client.",
+    )
+    _token: Token | None = PrivateAttr(default=None)
+    _client: httpx.Client | None = PrivateAttr(default=None)
 
-    @computed_field
+    @computed_field  # type: ignore[prop-decorator]
     @property
     def url_auth(self) -> str:
         """URL of the authentication endpoint."""
-        return f"{self.base_url}/login/access_token"
+        return f"{self.base_url}/login/access_token"  # pragma: no cover
 
-    @computed_field
+    @computed_field  # type: ignore[prop-decorator]
     @property
     def url_refresh(self) -> str:
         """URL of the token refresh endpoint."""
-        return f"{self.base_url}/login/refresh_token"
+        return f"{self.base_url}/login/refresh_token"  # pragma: no cover
 
     @model_validator(mode="after")
-    def _validate_initial_credentials(self):
+    def _initialize_client_and_token(self) -> "TokenClient":
+        self._client = httpx.Client(base_url=self.base_url, transport=self.transport)
         self._token = self._get_token()
+        return self
 
     @property
     def token(self) -> Token:
@@ -74,7 +83,7 @@ class TokenClient(BaseModel):
         Returns:
             Token: The current authentication token.
         """
-        if self._token.is_expired:
+        if self._token is None or self._token.is_expired:
             # Todo we could use refresh token here
             self._token = self._get_token()
         return self._token
@@ -85,8 +94,10 @@ class TokenClient(BaseModel):
         Returns:
             str: The new access token.
         """
-        response = httpx.post(
-            self.url_auth, data={"username": self.username, "password": self.password}
+        assert self._client is not None, "Client should be initialized"
+        response = self._client.post(
+            self.url_auth,
+            data={"username": self.username, "password": self.password},
         )
         if response.status_code != 200:
             raise ValueError(f"Failed to obtain access token: {response.text}")

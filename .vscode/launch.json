@@ -10,6 +10,19 @@
             "request": "launch",
             "program": "dev.py",
             "console": "integratedTerminal",
+        },
+        {
+            "name": "Python Debugger: pytest",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "pytest",
+            "args": [
+                "-vv",
+                "tests/"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "cwd": "${workspaceFolder}"
         }
     ]
 }

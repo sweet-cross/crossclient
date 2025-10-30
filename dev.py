@@ -1,4 +1,4 @@
-from crossclient.client import CrossClient
+from crossclient import CrossClient
 
 if __name__ == "__main__":
     client = CrossClient(
