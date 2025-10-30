@@ -1,4 +1,5 @@
 site_name: crossclient
+site_url: https://sweet-cross.github.io/crossclient/
 theme:
   name: material
 nav:
