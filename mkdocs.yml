@@ -1,0 +1,14 @@
+site_name: crossclient
+theme:
+  name: material
+nav:
+  - Home: index.md
+  - API: api.md
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            show_source: true
+            show_root_toc_entry: false

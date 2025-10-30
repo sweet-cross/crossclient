@@ -26,7 +26,7 @@ class CrossClient(BaseModel):
     _token_client: TokenClient | None = None
 
     @model_validator(mode="after")
-    def validate_credentials(self) -> "CrossClient":
+    def _initialized_clients(self) -> "CrossClient":
         """Validator to retrieve the token after model initialization and
         initialize the HTTP client."""
         self._token_client = TokenClient(
@@ -63,7 +63,9 @@ class CrossClient(BaseModel):
         response = self._client.request(method, endpoint, headers=headers, **kwargs)
         return response
 
-    def post(self, endpoint: str, json: dict | None = None, **kwargs) -> httpx.Response:
+    def post(
+        self, endpoint: str, json: dict | None = None, **kwargs: dict
+    ) -> httpx.Response:
         """Send a POST request to the specified endpoint.
 
         Args:
@@ -75,7 +77,7 @@ class CrossClient(BaseModel):
         """
         return self._request("POST", endpoint, json=json, **kwargs)
 
-    def get(self, endpoint: str, **kwargs) -> httpx.Response:
+    def get(self, endpoint: str, **kwargs: dict) -> httpx.Response:
         """Send a GET request to the specified endpoint.
 
         Args:

@@ -5,6 +5,10 @@ from pydantic import BaseModel, Field, model_validator, computed_field, PrivateA
 
 
 class Token(BaseModel):
+    """Token represents the authentication token structure returned by the API. It
+    includes the access token, refresh token, token type, creation timestamp, and
+    expiration details."""
+
     access_token: str = Field(description="The access token for authentication.")
     refresh_token: str = Field(
         description="The refresh token for obtaining new access tokens."
@@ -45,7 +49,10 @@ class Token(BaseModel):
 
 
 class TokenClient(BaseModel):
-    """Client for handling token operations."""
+    """The TokenClient handles authentication and token management for the API. It
+    retrieves and refreshes access tokens as needed. For most use cases, a direct
+    interaction with this client is not necessary, as the CrossClient will manage
+    tokens automatically by incorporating the TokenClient internally."""
 
     username: str = Field(description="The username for authentication.")
     password: str = Field(description="The password for authentication.")
