@@ -1,0 +1,77 @@
+import httpx
+
+from pydantic import BaseModel, Field, model_validator
+from .token_client import TokenClient
+
+
+class CrossClient(BaseModel):
+    """CrossClient is the basic client to interact with the SweetCross API. It
+    provides basic request methods to interact with the API endpoints. It also
+    handles authentication via tokens based on the underlying TokenClient."""
+
+    username: str = Field(description="The username for authentication.")
+    password: str = Field(description="The password for authentication.")
+    base_url: str = Field(
+        default="https://sweetcross.link/api/v1",
+        description="The base URL of the SweetCross API.",
+    )
+    _client: httpx.Client | None = None
+    _token_client: TokenClient | None = None
+
+    @model_validator(mode="after")
+    def validate_credentials(self) -> None:
+        """Validator to retrieve the token after model initialization and
+        initialize the HTTP client."""
+        self._token_client = TokenClient(
+            username=self.username,
+            password=self.password,
+            base_url=self.base_url,
+        )
+        self._client = httpx.Client(base_url=self.base_url)
+
+    def _request(
+        self, method: str, endpoint: str, headers: dict | None = None, **kwargs
+    ) -> httpx.Response:
+        """Formulate an API requests given the name of the endpoint and the
+        request method
+
+        Args:
+            method (str): The HTTP method to use (e.g., "GET", "POST").
+            endpoint (str): The API endpoint to send the request to.
+            headers (dict | None): Headers to include in the request.
+            **kwargs: Additional arguments to pass to the request method.
+
+        Returns:
+            httpx.Response: The response from the API.
+        """
+        if headers is None:
+            headers = {}
+        headers["Authorization"] = (
+            f"{self._token_client.token.token_type} {self._token_client.token.access_token}"
+        )
+        response = self._client.request(method, endpoint, headers=headers, **kwargs)
+        return response
+
+    def post(self, endpoint: str, json: dict | None = None, **kwargs) -> httpx.Response:
+        """Send a POST request to the specified endpoint.
+
+        Args:
+            endpoint (str): The API endpoint to send the request to.
+            json (dict | None): The JSON payload to include in the request body.
+            **kwargs: Additional arguments to pass to the request method.
+        Returns:
+            httpx.Response: The response from the API.
+        """
+        return self._request("POST", endpoint, json=json, **kwargs)
+
+    def get(self, endpoint: str, **kwargs) -> httpx.Response:
+        """Send a GET request to the specified endpoint.
+
+        Args:
+            endpoint (str): The API endpoint to send the request to.
+            **kwargs: Additional arguments to pass to the request method.
+
+        Returns:
+            httpx.Response: The response from the API.
+        """
+        return self._request("GET", endpoint, **kwargs)

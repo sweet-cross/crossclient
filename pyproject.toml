@@ -1,0 +1,17 @@
+[project]
+name = "crossclient"
+version = "0.1.0"
+description = "A python client to interact with the CROSS API.  "
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "httpx>=0.28.1",
+    "pandas>=2.3.3",
+    "pydantic>=2.12.3",
+]
+
+[dependency-groups]
+dev = [
+    "coverage>=7.11.0",
+    "pytest>=8.4.2",
+]
