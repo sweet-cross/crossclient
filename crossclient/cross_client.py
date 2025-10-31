@@ -105,7 +105,7 @@ class CrossClient(BaseModel):
             # Pass control to the request method for authentication and execution
             return self._request("POST", endpoint, json=json, **kwargs)
         finally:
-            # in anyways close the file handles after request completion
+            # in any case, close the file handles after request completion
             for handle in file_handles_to_close:
                 handle.close()
 
