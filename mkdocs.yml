@@ -25,6 +25,7 @@ nav:
   - API Reference: api.md
 
 markdown_extensions:
+  - admonition
   - toc:
       # Only include <h1> and <h2> headings in the TOC
       toc_depth: 3

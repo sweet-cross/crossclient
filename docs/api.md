@@ -1,5 +1,9 @@
 # API Reference
 
+!!! warning "Development Version"
+    This library is currently in active development and the API is subject to changes.
+    Features, function signatures, and behavior may change between versions without notice.
+
 ## Cross Client
 
 ::: crossclient.cross_client
