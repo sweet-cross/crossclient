@@ -1,11 +1,10 @@
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timedelta, timezone
 
 import httpx
-from pydantic import ValidationError
 import pytest
+from pydantic import ValidationError
 
 from crossclient.token_client import Token, TokenClient
-
 
 token_data = {
     "access_token": "abc123",

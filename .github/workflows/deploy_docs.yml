@@ -1,15 +1,18 @@
 name: Deploy Documentation
 
 on:
+  push:
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
-  deploy:
+  deploy_docs:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -17,7 +20,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version-file: '.python-version'
+          python-version-file: ".python-version"
 
       - name: Install uv
         uses: astral-sh/setup-uv@v3

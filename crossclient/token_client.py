@@ -1,7 +1,14 @@
+"""
+The `TokenClient` handles authentication and token refreshing. In normal use cases
+this client is not directly used but automatically handled through the
+[CrossClient][crossclient.cross_client.CrossClient].
+"""
+
+from datetime import datetime, timedelta, timezone
 from typing import Any
-from datetime import datetime, timezone, timedelta
+
 import httpx
-from pydantic import BaseModel, Field, model_validator, computed_field, PrivateAttr
+from pydantic import BaseModel, Field, PrivateAttr, computed_field, model_validator
 
 
 class Token(BaseModel):
