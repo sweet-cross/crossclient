@@ -19,8 +19,8 @@ client = CrossClient(
 from typing import Any
 
 import httpx
-
 from pydantic import BaseModel, Field, model_validator
+
 from .token_client import TokenClient
 
 

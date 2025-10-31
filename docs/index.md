@@ -1,8 +1,8 @@
 # Welcome to crossclient
 
-`crossclient` is Python client for the [SWEET-CROSS API](https://sweetcross.link/docs). 
-It implements method to enable convenient interaction with the API including result 
-submission without the need to upload files through the webpage and analyzing data 
+`crossclient` is Python client for the [SWEET-CROSS API](https://sweetcross.link/docs).
+It implements method to enable convenient interaction with the API including result
+submission without the need to upload files through the webpage and analyzing data
 without manual downloads. Common use cases are:
 
 - [Result Submission](api.md#result-submission)

@@ -50,9 +50,10 @@ submit_results(
 """
 
 import datetime
-from io import BytesIO
 import json
+from io import BytesIO
 from pathlib import Path
+from typing import IO
 
 import pandas as pd
 
@@ -104,7 +105,7 @@ def submit_results(
     }
 
     # create the file payload and submit the data
-    file_payload = {}
+    file_payload: dict[str, tuple[str, IO[bytes], str]] = {}
     if df_results is None:  # read from file if no dataframe is provided
         if not fn_results.exists():  # check that file exists
             raise ValueError(f"The specified results file does not exist: {fn_results}")
@@ -125,7 +126,7 @@ def submit_results(
             raise ValueError(
                 "When providing results as a DataFrame, the filename must end with .csv"
             )
-        buffer = BytesIO()
+        buffer: IO[bytes] = BytesIO()
         df_results.to_csv(buffer, index=False, encoding="utf-8")
         buffer.seek(0)
         file_payload["file"] = (
