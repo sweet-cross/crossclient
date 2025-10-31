@@ -68,7 +68,7 @@ def submit_results(
 ) -> None:
     """
     Submits the results using the provided CrossClient instance. The results
-    are expected to be provided as pandas dataframe.
+    are expected to be provided as pandas DataFrame.
 
     Args:
         client (CrossClient): An instance of CrossClient to handle submission.
@@ -77,7 +77,7 @@ def submit_results(
             If None, the results will be read from the file specified by fn_results.
             If provided, the filename must end with .csv, i.e., data are uploaded
             as csv.
-            Note: Indexes of the Dataframe are not included in the uploaded file.
+            Note: Indexes of the DataFrame are not included in the uploaded file.
         submission_contract (str | None): The submission contract identifier.
             If None the default contract will be used: submission_cross2025
     Raises:
@@ -149,4 +149,3 @@ def submit_results(
         raise ValueError(
             f"Submission failed with status code {res.status_code}: {res.text}"
         )
-    # client.submit(results)
