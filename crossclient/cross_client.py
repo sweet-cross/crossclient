@@ -75,7 +75,21 @@ class CrossClient(BaseModel):
         Returns:
             httpx.Response: The response from the API.
         """
-        return self._request("POST", endpoint, json=json, **kwargs)
+        # take care of file handles if any
+        file_handles_to_close = []
+        if "files" in kwargs:
+            for _, file_tuple in kwargs["files"].items():
+                # file_tuple is (filename, file_handle, mimetype)
+                file_handle = file_tuple[1]
+                if hasattr(file_handle, "close"):
+                    file_handles_to_close.append(file_handle)
+        try:
+            # Pass control to the request method for authentication and execution
+            return self._request("POST", endpoint, json=json, **kwargs)
+        finally:
+            # in anyways close the file handles after request completion
+            for handle in file_handles_to_close:
+                handle.close()
 
     def get(self, endpoint: str, **kwargs: dict) -> httpx.Response:
         """Send a GET request to the specified endpoint.

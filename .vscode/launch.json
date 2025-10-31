@@ -1,28 +1,28 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "name": "Python Debugger: dev.py",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "dev.py",
-            "console": "integratedTerminal",
-        },
-        {
-            "name": "Python Debugger: pytest",
-            "type": "debugpy",
-            "request": "launch",
-            "module": "pytest",
-            "args": [
-                "-vv",
-                "tests/"
-            ],
-            "console": "integratedTerminal",
-            "justMyCode": false,
-            "cwd": "${workspaceFolder}"
-        }
-    ]
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Python Debugger: dev.py",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "dev.py",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Python Debugger: pytest",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "pytest",
+      "args": [
+        "-vv",
+        "tests/test_result_submission.py::TestResultSubmission::test_dataframe_with_wrong_extension"
+      ],
+      "console": "integratedTerminal",
+      "justMyCode": false,
+      "cwd": "${workspaceFolder}"
+    }
+  ]
 }
