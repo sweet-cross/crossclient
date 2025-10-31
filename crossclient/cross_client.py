@@ -1,3 +1,21 @@
+"""
+The `CrossClient` is main client to interact with CROSS API it provides different
+methods that formulate the request to the API and return the response. It is
+initialized using the user name and password and automatically handles
+authentication.
+
+The standard usage is:
+
+``` py title="Example: Initializing the CrossClient"
+from crossclient import CrossClient
+
+client = CrossClient(
+    username="me",
+    password="my_password",
+)
+```
+"""
+
 from typing import Any
 
 import httpx

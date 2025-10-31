@@ -1,3 +1,9 @@
+"""
+The `TokenClient` handles authentication and token refreshing. In normal use cases
+this client is not directly used but automatically handled through the
+[CrossClient][crossclient.cross_client.CrossClient].
+"""
+
 from typing import Any
 from datetime import datetime, timezone, timedelta
 import httpx

@@ -1,3 +1,54 @@
+"""
+`crossclient` allows to automatically submit your result files to the CROSS platform.
+After obtaining the user name and password, result submission requires initializing
+the `CrossClient`. Equipped with the client, the `submit_results`
+function allows submitting the results either from a locally stored csv or Excel
+file or from a pandas DataFrame. The function takes a `submission_contract` argument
+that determines under which project (identified by the contract) the file is submitted. The
+standard is ``"submission_cross2025"``.
+
+The standard way of uploading a file is:
+
+``` py title="Example: Submitting a CSV file"
+from crossclient import CrossClient, submit_results
+
+client = CrossClient(
+    username="me",
+    password="my_password",
+)
+
+fn_csv = "path_to_my.csv"
+submit_results(
+    client=client,
+    fn_results=fn_csv
+)
+```
+
+Submission with a pandas DataFrame requires that the file name has a ".csv"
+extension. In the back, the function converts the DataFrame to a csv file and uses
+the given name to upload the file. Note that indexes are ignored, i.e., only the
+columns of the DataFrame are used to create the csv file.
+
+``` py title="Example: Submitting results from a DataFrame"
+import pandas as pd
+from crossclient import CrossClient, submit_results
+
+client = CrossClient(
+    username="me",
+    password="my_password",
+)
+
+fn_csv = "my_upload_name.csv"
+df = pd.DataFrame({"a": [1, 2], "b": [3, 4]})
+submit_results(
+    client=client,
+    fn_results=fn_csv,
+    df_results=df,
+    submission_contract="submission_cross2025"
+)
+```
+"""
+
 import datetime
 from io import BytesIO
 import json
